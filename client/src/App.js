@@ -14,18 +14,15 @@ function App() {
   return (
     <Router>
       <div>
-        
-        
-        <Switch>
-          <Route exact path="/" component={LandingPage} /> {/* 방법1 */}
+        <Route exact path="/" component={LandingPage} /> {/* 방법1 */}
 
-          <Route exact path="/login">
-            <LoginPage />                         {/* 방법2 */}
-          </Route>
-          <Route exact path="/register">
-            <RegisterPage />
-          </Route> 
-        </Switch>
+        <Route exact path="/login">
+          <LoginPage />                         {/* 방법2 */}
+        </Route>
+        <Route exact path="/register">
+          <RegisterPage />
+        </Route> 
+        
       </div>
     </Router>
   );
