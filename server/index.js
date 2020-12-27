@@ -79,7 +79,7 @@ app.get('/api/users/auth', auth, (req,res)=>{
   })
 })
 
-app.get('/api/users/logout',auth, (req,res)=>{
+app.post('/api/users/logout',auth, (req,res)=>{
   console.log('user:',req.user)
   User.findOneAndUpdate({_id:req.user._id},{token:""},(err,user)=>{ //미들웨어에서 _id값 찾아줌
     if(err) return res.json({success:false, err});
