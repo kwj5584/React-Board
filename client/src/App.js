@@ -8,21 +8,23 @@ import {
 import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
-
+import Auth from './hoc/auth';
 
 function App() {
   return (
     <Router>
       <div>
-        <Route exact path="/" component={LandingPage} /> {/* 방법1 */}
-
-        <Route exact path="/login">
-          <LoginPage />                         {/* 방법2 */}
-        </Route>
-        <Route exact path="/register">
-          <RegisterPage />
-        </Route> 
+        <Route exact path="/" component={Auth(LandingPage, null )} /> {/* 방법1 */}
+        <Route exact path='/login' component={Auth(LoginPage, false)}/>
+        <Route exact path='/register' component={Auth(RegisterPage, false)}/>
+        {/* <Route exact path="/register">
+          <RegisterPage /> 방법2
+        </Route>  */} 
         
+        {/* <Route exact path="/login">
+          <LoginPage />     방법2                
+        </Route> */}
+
       </div>
     </Router>
   );
