@@ -37,9 +37,13 @@ function NavBar(props) {
         pathname:'/myPage',
         state:{name:name}})
     }
-    console.log('name:',name)
+    const onRegisterHandler=()=>{
+      props.history.push('/register')
+    }
+
   return (
     <div>
+    {/* <div style={{justifyContent:'center', height:'100', margin:'40px' }}> */}
       <Navbar bg="light" variant="">
       {/* <Navbar.Brand href="#home">Navbar</Navbar.Brand> */}
       <Nav className="mr-auto">
@@ -48,6 +52,7 @@ function NavBar(props) {
         <NavDropdown.Item>{ isLogin ? <Button onClick={onLogoutHandler}>로그아웃</Button>
           : <Button onClick={onLoginHandler}>로그인</Button>}
         </NavDropdown.Item>
+        <NavDropdown.Item>{<Button onClick={onRegisterHandler}>회원가입</Button>}</NavDropdown.Item>
         <NavDropdown.Item >{<Button onClick={myPage}>마이 페이지</Button>}</NavDropdown.Item>
       </NavDropdown>
       </Nav>
