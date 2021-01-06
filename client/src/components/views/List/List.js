@@ -1,20 +1,45 @@
-import React from 'react';
-import {Button} from 'react-bootstrap'
+import React,{useEffect,useState} from 'react';
+import axios from 'axios'
 import {withRouter} from 'react-router-dom'
-function List(props){
-    const name = props.name
-    console.log('listpage:',props.name)
 
-    const listAddPage =()=>{
-        props.history.push({
-            pathname: '/listAdd',
-            state:{name: name}})
-    }
-    return(
-        <>
-            <h2>List Page</h2>
-            <Button onClick={listAddPage}>글 작성</Button>
-        </>
+function List(props){
+    // const name = props.name
+    const [dataList,setDataList] = useState({
+        title:'',
+        userName:'',
+        contents:''
+    })
+    const lists = []
+    console.log('listpage:',props.name)
+    useEffect(()=>{
+        axios.get('api/boards/getList')
+        .then((res)=>{
+            setDataList(res.data)
+            // setDataList(lists.concat(res.data))
+            // lists.push(res.data)
+        })
+    },[])
+    console.log('lists:',dataList)
+
+    return( 
+        <div>
+        <h2>ListPage</h2>
+            <table>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                </tr>
+            <tbody>
+                {dataList.map((data,index)=> <tr key={data._id}>
+                    <td>{index+1}</td>
+                    <td>{data.title}</td>
+                    <td>{data.userName}</td>
+                </tr>)}
+            </tbody>
+            </table>
+            
+        </div>
     )
 }
 
