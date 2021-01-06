@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;//salt가 몇 글자인지
 const jwt = require('jsonwebtoken');
+const Schema = mongoose.Schema
 
-const userSchema = mongoose.Schema({
+const userSchema = new Schema({
   name:{
     type:String,
     maxlength:50
