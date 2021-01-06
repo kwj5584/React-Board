@@ -3,7 +3,8 @@ import axios from 'axios';
 import {
     LOGIN_USER,
     REGISTER_USER,
-    AUTH_USER
+    AUTH_USER,
+    LIST_ADD
 } from './types'
 
 export function loginUser(dataTosubmit){
@@ -31,6 +32,16 @@ export function auth(){
 
     return{
         type:AUTH_USER,
+        payload:request
+    }
+}
+
+export function listAdd(dataToSubmit){
+    const request = axios.post('/api/boards/add',dataToSubmit)
+    .then(res=>res.data)
+
+    return{
+        type:LIST_ADD,
         payload:request
     }
 }
