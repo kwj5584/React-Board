@@ -1,5 +1,5 @@
 import {
-    LOGIN_USER, REGISTER_USER, AUTH_USER, LIST_ADD, GET_LIST
+    LOGIN_USER, REGISTER_USER, AUTH_USER, LIST_ADD, GET_LIST, GET_DETAIL
 } from '../_actions/types';
 
 const Reducer = (state = {},action) =>{
@@ -23,7 +23,11 @@ const Reducer = (state = {},action) =>{
         case GET_LIST:
             return{ ...state, getList: action.payload}
             break;
-            
+
+        case GET_DETAIL:
+            return{ ...state, getDetail: action.payload}
+            break;
+
         default:
             return state;
     }
