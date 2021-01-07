@@ -12,7 +12,7 @@ import MyPage from './components/views/MyPage'
 import Auth from './hoc/auth';
 import NavBar from './components/views/NavBar/NavBar';
 import ListAdd from './components/views/List/ListAdd'
-
+import ListDetailPage from './components/views/List/ListDetailPage'
 function App() {
   
   return (
@@ -24,6 +24,7 @@ function App() {
         <Route exact path='/register' component={Auth(RegisterPage, false)}/>
         <Route exact path='/myPage' component={Auth(MyPage,true)}/>
         <Route exact path='/listAdd' component={Auth(ListAdd,true)}/>
+        <Route exatch path='/detailPage' component={Auth(ListDetailPage,null)}/>
         {/* <Route exact path="/register">
           <RegisterPage /> 방법2
         </Route>  */} 
