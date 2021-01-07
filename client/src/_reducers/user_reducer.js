@@ -1,5 +1,5 @@
 import {
-    LOGIN_USER, REGISTER_USER, AUTH_USER, LIST_ADD
+    LOGIN_USER, REGISTER_USER, AUTH_USER, LIST_ADD, GET_LIST
 } from '../_actions/types';
 
 const Reducer = (state = {},action) =>{
@@ -15,8 +15,15 @@ const Reducer = (state = {},action) =>{
         case AUTH_USER:
             return{ ...state, userData : action.payload}
             break;
+
         case LIST_ADD:
-            return{ ...state, listData : action.payload}       
+            return{ ...state, listData : action.payload}      
+            break; 
+
+        case GET_LIST:
+            return{ ...state, getList: action.payload}
+            break;
+            
         default:
             return state;
     }
