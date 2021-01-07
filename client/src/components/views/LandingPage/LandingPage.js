@@ -14,11 +14,11 @@ function LandingPage(props) {
   useEffect(()=>{
     dispatch(auth())
     .then((res)=>{
-      console.log('랜딩페이지: ',res);
+      // console.log('랜딩페이지: ',res);
       setName(res.payload.name)
       setIsLogin(res.payload.isAuth)
     })
-  })
+  },[dispatch])
   const listAddPage =()=>{
     if(!isLogin){
       alert('로그인 먼저하세요')
@@ -32,12 +32,12 @@ function LandingPage(props) {
   
   return (
     <div style={{
-      display:'flex', justifyContent:'center', alignItems:'center',
+      justifyContent:'center', alignItems:'center',
       width:"100%", height: '100vh'
     }}>
       <List/>
-      <br/>
-      <Button onClick={listAddPage}>글 작성</Button>
+      
+      <Button style={{justifyContent:'center', alignItems:'center'}} onClick={listAddPage}>글 작성</Button>
       
     </div>
   )
