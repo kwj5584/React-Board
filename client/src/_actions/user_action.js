@@ -4,7 +4,8 @@ import {
     LOGIN_USER,
     REGISTER_USER,
     AUTH_USER,
-    LIST_ADD
+    LIST_ADD,
+    GET_LIST
 } from './types'
 
 export function loginUser(dataTosubmit){
@@ -42,6 +43,16 @@ export function listAdd(dataToSubmit){
 
     return{
         type:LIST_ADD,
+        payload:request
+    }
+}
+
+export function getList(){
+    const request = axios.get('/api/boards/getList')
+    .then(res=>res.data)
+
+    return{
+        type:GET_LIST,
         payload:request
     }
 }
