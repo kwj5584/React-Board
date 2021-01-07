@@ -1,24 +1,20 @@
 import React,{useEffect,useState} from 'react';
-import axios from 'axios'
+import {useDispatch} from 'react-redux'
 import {withRouter} from 'react-router-dom'
+import {getList} from '../../../_actions/user_action'
 
 function List(props){
+    const dispatch = useDispatch()
     // const name = props.name
-    const [dataList,setDataList] = useState({
-        title:'',
-        userName:'',
-        contents:''
-    })
-    const lists = []
-    console.log('listpage:',props.name)
+    const [dataList,setDataList] = useState([])
+    
+    // console.log('listpage:',props.name)
     useEffect(()=>{
-        axios.get('api/boards/getList')
-        .then((res)=>{
-            setDataList(res.data)
-            // setDataList(lists.concat(res.data))
-            // lists.push(res.data)
-        })
-    },[])
+        dispatch(getList())
+        .then((res=>{
+            setDataList(res.payload)
+        }))
+    },[dispatch])
     console.log('lists:',dataList)
 
     return( 
@@ -31,11 +27,14 @@ function List(props){
                     <th>작성자</th>
                 </tr>
             <tbody>
-                {dataList.map((data,index)=> <tr key={data._id}>
-                    <td>{index+1}</td>
-                    <td>{data.title}</td>
-                    <td>{data.userName}</td>
-                </tr>)}
+                {
+                    dataList.map((data,index) => 
+                        <tr key={data._id}>
+                            <td>{index+1}</td>
+                            <td>{data.title}</td>
+                            <td>{data.userName}</td>
+                </tr>)
+                }
             </tbody>
             </table>
             
