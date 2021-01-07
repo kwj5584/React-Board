@@ -1,23 +1,24 @@
 import React,{useEffect, useState} from 'react'
-import axios from 'axios';
 import {Button} from 'react-bootstrap'
 import {withRouter} from 'react-router-dom'
 import List from '../List/List'
-
+import {auth} from '../../../_actions/user_action'
+import {useDispatch} from 'react-redux'
 
 function LandingPage(props) {
-  
+  const dispatch = useDispatch()
+
   const [name,setName] = useState('');
   const [isLogin,setIsLogin] = useState('false')
 
   useEffect(()=>{
-    axios.get('api/users/auth')
+    dispatch(auth())
     .then((res)=>{
       console.log('랜딩페이지: ',res);
-      setName(res.data.name)
-      setIsLogin(res.data.isAuth)
+      setName(res.payload.name)
+      setIsLogin(res.payload.isAuth)
     })
-  },[])
+  })
   const listAddPage =()=>{
     if(!isLogin){
       alert('로그인 먼저하세요')
