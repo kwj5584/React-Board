@@ -24,13 +24,23 @@ router.post('/add', (req,res)=>{
     }
 })
 router.get('/getList',(req,res)=>{
-    Board.find({},{_id:1,title:1,userName:1,contents:1},(err,boardList)=>{
+    Board.find({},{_id:1,title:1,userName:1},(err,boardList)=>{
         if(err) return res.status(500).json({error:err});
         if(!boardList) return res.status(404).json({message : 'boardList not found'})
 
         res.send(boardList)
     })
 
+})
+
+router.post('/getDetail',(req,res)=>{
+    // console.log('detail',req.body)
+    Board.find({_id:req.body},{_id:1,title:1,userName:1,contents:1},(err,boardList)=>{
+        if(err) return res.status(500).json({error:err});
+        if(!boardList) return res.status(404).json({message : 'boardList not found'})
+        console.log('boardList:',boardList)
+        res.send(boardList)
+    })
 })
 
 
