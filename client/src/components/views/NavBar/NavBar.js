@@ -1,26 +1,28 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios';
 import {withRouter} from 'react-router-dom'
-import {Nav, Form, FormControl,Button,Navbar, NavDropdown} from 'react-bootstrap'
-import {FiAlignJustify} from 'react-icons/fi';
+import {Nav, Button,Navbar, NavDropdown} from 'react-bootstrap'
+import {auth} from '../../../_actions/user_action'
+import {useDispatch} from 'react-redux'
 
 function NavBar(props) {
+  const dispatch = useDispatch()
   const [isLogin,setIsLogin] = useState('false');
   const [name,setName] = useState('');
 
     useEffect(()=>{
-      axios.get('api/users/auth')
+      dispatch(auth())
       .then((res)=>{
-        console.log(res);
-        setName(res.data.name)
-        setIsLogin(res.data.isAuth);
+//         console.log(res);
+        setName(res.payload.name)
+        setIsLogin(res.payload.isAuth);
       })
-    },[])
+    },[dispatch])
     
     const onLogoutHandler = ()=>{
       axios.post('/api/users/logout')
       .then(res=>{
-        console.log('프론트 로그아웃버튼 클릭',res)
+//         console.log('프론트 로그아웃버튼 클릭',res)
         if(res.data.success){
           alert('로그아웃 성공')
           props.history.push('/login')
