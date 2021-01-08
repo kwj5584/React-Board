@@ -7,6 +7,7 @@ import {
     LIST_ADD,
     GET_LIST,
     GET_DETAIL,
+    LIST_UPDATE,
 } from './types'
 
 export function loginUser(dataTosubmit){
@@ -59,12 +60,22 @@ export function getList(){
 }
 
 export function getDetail(dataToSubmit){
-    console.log('action detiailApi:',dataToSubmit)
+    // console.log('action detiailApi:',dataToSubmit)
     const request = axios.post('/api/boards/getDetail', dataToSubmit)
     .then(res=>res.data)
 
     return{
         type:GET_DETAIL,
+        payload:request
+    }
+}
+
+export function listUpdate(dataTosubmit){
+    const request = axios.patch('/api/boards/update',dataTosubmit)
+    .then(res=>res.data)
+
+    return{
+        type:LIST_UPDATE,
         payload:request
     }
 }
