@@ -38,9 +38,22 @@ router.post('/getDetail',(req,res)=>{
     Board.find({_id:req.body},{_id:1,title:1,userName:1,contents:1},(err,boardList)=>{
         if(err) return res.status(500).json({error:err});
         if(!boardList) return res.status(404).json({message : 'boardList not found'})
-        console.log('boardList:',boardList)
+        // console.log('boardList:',boardList)
         res.send(boardList)
     })
+})
+
+router.patch('/update',(req,res)=>{
+    console.log(req.body)
+    Board.findOneAndUpdate({_id:req.body._id}, {$set:{title:req.body.title, contents:req.body.contents}},
+        {new:true},(err,dataList)=>{
+            if(err) return res.status(500).json({error:err})
+            if(!dataList) return res.status(404).json({message: 'dataList not Found'})
+
+            return res.json({
+                updateSuccess:true
+            })
+        })
 })
 
 
