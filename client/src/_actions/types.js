@@ -5,3 +5,4 @@ export const LIST_ADD = 'list_add';
 export const GET_LIST = 'get_list'
 export const GET_DETAIL = 'get_detail'
 export const LIST_UPDATE = 'list_update'
+export const LIST_DELETE = 'list_delete'

@@ -8,6 +8,7 @@ import {
     GET_LIST,
     GET_DETAIL,
     LIST_UPDATE,
+    LIST_DELETE,
 } from './types'
 
 export function loginUser(dataTosubmit){
@@ -76,6 +77,17 @@ export function listUpdate(dataTosubmit){
 
     return{
         type:LIST_UPDATE,
+        payload:request
+    }
+}
+
+export function listDelete(dataToSubmit){
+    console.log('deleteaction',dataToSubmit)
+    const request = axios.delete('/api/boards/delete', {data:{_id:dataToSubmit}})
+    .then(res=>res.data)
+
+    return{
+        type:LIST_DELETE,
         payload:request
     }
 }
