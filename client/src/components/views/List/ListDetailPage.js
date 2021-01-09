@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useRef} from 'react';
+import React,{useEffect,useState} from 'react';
 import {useDispatch} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {getDetail} from '../../../_actions/user_action'
@@ -20,18 +20,18 @@ function ListDetailPage(props){
     const [title,setTitle] = useState('')
     const [userName,setUserName] = useState('')
     const [contents,setContents] = useState('')
-    let body = {_id:_id}
+    
     
     useEffect(()=>{
+        let body = {_id:_id}
         dispatch(getDetail(body))
         .then((res=>{
             // console.log('listdetailpage',res.payload[0])
             setTitle(res.payload[0].title)
             setUserName(res.payload[0].userName)
-            
             setContents(res.payload[0].contents)
         }))
-    },[dispatch])
+    },[dispatch,_id])
     
     const htmlToEditor = contents
     const blocksFromHtml = htmlToDraft(htmlToEditor);
@@ -49,7 +49,7 @@ function ListDetailPage(props){
         }else{
         props.history.push({
             pathname:'/modify',
-            state:{ userId: _id, loginUser:loginUser }
+            state:{ userId: _id, loginUser:loginUser, title:title, contents:contents }
         })
     }
     }
