@@ -10,6 +10,8 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {EditorState, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
 
+import {listDelete} from '../../../_actions/user_action'
+
 function ListDetailPage(props){
     const loginUser = props.location.state.name;
     const _id = props.location.state._id
@@ -53,6 +55,22 @@ function ListDetailPage(props){
         })
     }
     }
+    const onDeleteHandler= ()=>{
+        if(loginUser !== userName){
+            alert('작성자만 삭제할 수 있습니다.')
+        }else{
+            let body = {_id:_id}
+            // alert(body)
+            dispatch(listDelete(body))
+            .then((res)=>{
+                if(res.payload.deleteSuccess){
+                    props.history.push('/')
+                }else{
+                    alert('삭제 실패')
+                }
+            })
+        }
+    }
     const MyBlock = styled.div`
     .editor {
     height: 600px;
@@ -61,7 +79,6 @@ function ListDetailPage(props){
     border-radius: 2px !important;
     }
 `;
-
     return(
         <>
         <MyBlock>
@@ -78,6 +95,7 @@ function ListDetailPage(props){
             <br/>
             <Button onClick={back}>목록으로</Button>
             <Button onClick={onModifyHandler}>수정</Button>
+            <Button onClick={onDeleteHandler}>삭제</Button>
         </MyBlock>
         </>
     )
