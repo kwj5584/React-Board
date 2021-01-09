@@ -1,10 +1,8 @@
 import React,{useState,useEffect,useRef} from 'react';
 import {withRouter} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {getDetail} from '../../../_actions/user_action'
 import {Button} from 'react-bootstrap'
 import styled from 'styled-components'
-
 
 import {Editor} from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -17,33 +15,30 @@ import {listUpdate} from '../../../_actions/user_action'
 function ListModify(props){
     const userId = props.location.state.userId
     const userName = props.location.state.loginUser
-    console.log('modifypage:',userName)
-    const [title,setTitle] = useState('')
-    const [contents,setContents] = useState('') // 수정 전 Contents state
+    const prevTitle = props.location.state.title;
+    const prevContents = props.location.state.contents;
     
-    let body = {_id:userId}
+    const [title,setTitle] = useState(prevTitle)
+    const rendered = useRef(false)
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const dispatch = useDispatch();
-    // const [detailInfo, setDetailInfo] = useState([]) // userName, title state
     
-    useEffect(()=>{
-        dispatch(getDetail(body))
-        .then((res=>{
-            // console.log('listdetailpage',res.payload[0])
-            setTitle(res.payload[0].title)
-            setContents(res.payload[0].contents)
-        }))
-    },[dispatch])
-    
+    console.log('before useEffect2',editorState)
     // get해서 받아온 메세지 태그 삭제 
-    const htmlToEditor = contents
-    const blocksFromHtml = htmlToDraft(htmlToEditor);
-    const { contentBlocks, entityMap } = blocksFromHtml;
-    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-    
-    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
-    console.log('123',editorState)
+    useEffect(() => {
+        if (rendered.current) return;
+        rendered.current = true;
+        const blocksFromHtml = htmlToDraft(prevContents);
+        console.log('useEffect',prevContents)
+        if (blocksFromHtml) {
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+            const editorState = EditorState.createWithContent(contentState);
+            setEditorState(editorState);
+        }
+    },[prevContents]);
     // end
-
+    console.log('after useEffect2',editorState)
     // Editor로 입력한 문자 변환
     const editorToHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     // end 
@@ -60,6 +55,10 @@ function ListModify(props){
     border: 1px solid #f1f1f1 !important;
     padding: 5px !important;
     border-radius: 2px !important;
+    }
+    .Button {
+        justify-content:center;
+        align-item:center;
     }
 `;  
     const onResetHandler = ()=>{
@@ -92,7 +91,6 @@ function ListModify(props){
             <MyBlock>
                 <Editor
                     editorClassName='editor'
-                    value='test'
                     editorState={editorState}
                     onEditorStateChange={onEditorStateChange}
                 >
