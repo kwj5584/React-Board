@@ -7,17 +7,16 @@ import {useDispatch} from 'react-redux'
 
 function NavBar(props) {
   const dispatch = useDispatch()
-  const [isLogin,setIsLogin] = useState('false');
+  const [isLogin,setIsLogin] = useState(false);
   const [name,setName] = useState('');
 
     useEffect(()=>{
       dispatch(auth())
       .then((res)=>{
-//         console.log(res);
         setName(res.payload.name)
         setIsLogin(res.payload.isAuth);
       })
-    },[dispatch])
+    })
     
     const onLogoutHandler = ()=>{
       axios.post('/api/users/logout')
