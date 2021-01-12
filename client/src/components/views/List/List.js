@@ -15,12 +15,12 @@ function List(props){
         .then((res=>{
             setDataList(res.payload)
         }))
-    })
+    },[dispatch])
     useEffect(()=>{
         if(searchType==='title'){
             dispatch(findTitle(searchTitle))   
         .then((res=>{
-            console.log('test:',res.payload)
+            console.log('test:',res)
             setDataList(res.payload)
         }))
         }
