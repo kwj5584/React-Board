@@ -27,7 +27,6 @@ router.get('/getList',(req,res)=>{
     Board.find({},{_id:1,title:1,userName:1},(err,boardList)=>{
         if(err) return res.status(500).json({error:err});
         if(!boardList) return res.status(404).json({message : 'boardList not found'})
-
         res.send(boardList)
     })
 
@@ -65,6 +64,25 @@ router.delete('/delete',(req,res)=>{
         return res.json({
             deleteSuccess:true
         })
+    })
+})
+
+router.post('/findTitle',(req,res)=>{
+    console.log('findtitleapi',req.body)
+    Board.find({title:{$regex: req.body} },{title:1,userName:1,_id:1},(err,boardList)=>{
+        if(err) return res.status(500).json({error:err})
+        if(!boardList) return res.status(404).json({message:'boardList not found'})
+        res.send(boardList)
+    })
+})
+
+router.post('/findUserName',(req,res)=>{
+    console.log('findUserName api',req.body)
+    Board.find({userName: {$regex: req.body}},{_id:1,title:1,userName:1},(err,boardList)=>{
+        if(err) return res.status(500).json({error:err})
+        if(!boarList) return res.status(404).json({meesage: 'boardList not found'})
+        console.log('findUserName Rst:',boardList)
+        res.send(boardList);
     })
 })
 
