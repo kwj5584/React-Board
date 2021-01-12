@@ -1,21 +1,34 @@
 import React,{useEffect,useState} from 'react';
 import {useDispatch} from 'react-redux'
 import {withRouter} from 'react-router-dom'
-import {getList} from '../../../_actions/user_action'
+import {getList, findTitle, findUserName} from '../../../_actions/user_action'
 import {Table} from 'react-bootstrap'
 function List(props){
     const dispatch = useDispatch()
-    // const name = props.name
+    const name = props.name
     const [dataList,setDataList] = useState([])
-    
-    // console.log('listpage:',props.name)
+    const [searchType,setSearchType] = useState('title')
+    const [searchTitle,setSearchTitle] = useState('')
+    const [searchUserName, setSearchUserName] = useState('')
     useEffect(()=>{
         dispatch(getList())
         .then((res=>{
             setDataList(res.payload)
         }))
-    },[dispatch])
-    // console.log('lists:',dataList)
+    })
+    useEffect(()=>{
+        if(searchType==='title'){
+            dispatch(findTitle(searchTitle))   
+        .then((res=>{
+            console.log('test:',res.payload)
+            setDataList(res.payload)
+        }))
+        }
+        else{
+            dispatch(findUserName(searchUserName))
+            .then(res=>setDataList(res.payload))
+        }
+    },[searchTitle,searchUserName,searchType,dispatch])
 
     const detailPageHandler = (e)=>{
         const index = e.currentTarget.getAttribute('data-item')
@@ -23,12 +36,38 @@ function List(props){
         props.history.push({
             pathname:'/detailPage',
             search: `?query=${dataList[index]._id}`,
-            state:{_id: dataList[index]._id}
+            state:{_id: dataList[index]._id, name: name}
         })
-        console.log(dataList[index])
+    }
+    const onSearchTypeHandler = (e)=>{
+        setSearchType(e.target.value)
+    }
+    const searchTitleHandler = (e)=>{
+        setSearchTitle(e.target.value)
+        dispatch(findTitle(searchTitle))
+        console.log('searchTitle',searchTitle)
+        
+    }
+    const searchUserNameHandler = (e) =>{
+        setSearchUserName(e.target.value)
+        dispatch(findUserName(searchUserName))
+        console.log('searchUserName:',searchUserName)
+        
     }
     return( 
-        <div>
+        
+        <div style={{justifyContent:'center', height:'100', margin:'40px' }}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <select name='searchType' onChange={onSearchTypeHandler}>
+                    <option >Title</option>
+                    <option >userName</option>
+                </select>
+            <> {
+                searchType==='title' ? <input type='text' style={{height:'25px', width:'30%'}} onChange={searchTitleHandler} placeholder='Search Title...'></input>
+                : <input type='text' style={{height:'25px', width:'30%'}} onChange={searchUserNameHandler} placeholder='Search UserName...'></input>
+            }        </>
+            </div>
+            <br/>
             <Table>
                 <thead>
                 <tr>
