@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react'
 import {Button} from 'react-bootstrap'
 import {withRouter} from 'react-router-dom'
 import List from '../List/List'
-import {auth} from '../../../_actions/user_action'
+import {auth } from '../../../_actions/user_action'
 import {useDispatch} from 'react-redux'
 
 function LandingPage(props) {
@@ -10,11 +10,10 @@ function LandingPage(props) {
 
   const [name,setName] = useState('');
   const [isLogin,setIsLogin] = useState('false')
-
+  
   useEffect(()=>{
     dispatch(auth())
     .then((res)=>{
-      // console.log('랜딩페이지: ',res);
       setName(res.payload.name)
       setIsLogin(res.payload.isAuth)
     })
@@ -29,16 +28,14 @@ function LandingPage(props) {
         state:{name: name}})
       }
 }
+
   
   return (
-    <div style={{
-      justifyContent:'center', alignItems:'center',
-      width:"100%", height: '100vh'
-    }}>
-      <List/>
-      
-      <Button style={{justifyContent:'center', alignItems:'center'}} onClick={listAddPage}>글 작성</Button>
-      
+    <div>
+      <List name={name}/>
+      <div style={{display:'flex', alignItems : 'center', justifyContent:'center'}}>
+      <Button  onClick={listAddPage}>글 작성</Button>
+      </div>
     </div>
   )
   }
