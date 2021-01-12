@@ -68,22 +68,22 @@ router.delete('/delete',(req,res)=>{
 })
 
 router.post('/findTitle',(req,res)=>{
-    console.log('findtitleapi',req.body)
-    Board.find({title:{$regex: req.body} },{title:1,userName:1,_id:1},(err,boardList)=>{
-        if(err) return res.status(500).json({error:err})
-        if(!boardList) return res.status(404).json({message:'boardList not found'})
-        res.send(boardList)
+    console.log('findtitleapi',req.body.data)
+    Board.find({title: {$regex : req.body.data } },{title:1, userName:1,views:1},(err,datalist)=>{
+        if(err) return res.status(500).send({error : err});
+        if(!datalist) return res.status(404).send({error : 'List not found'});
+        res.send(datalist);
     })
-})
+    })
 
 router.post('/findUserName',(req,res)=>{
     console.log('findUserName api',req.body)
-    Board.find({userName: {$regex: req.body}},{_id:1,title:1,userName:1},(err,boardList)=>{
-        if(err) return res.status(500).json({error:err})
-        if(!boarList) return res.status(404).json({meesage: 'boardList not found'})
-        console.log('findUserName Rst:',boardList)
-        res.send(boardList);
+    Board.find({userName: {$regex : req.body.data } },{title:1, userName:1,views:1},(err,datalist)=>{
+        if(err) return res.status(500).send({error : err});
+        if(!datalist) return res.status(404).send({error : 'List not found'});
+        res.send(datalist);
     })
-})
+    })
+
 
 module.exports = router;
