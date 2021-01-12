@@ -9,6 +9,8 @@ import {
     GET_DETAIL,
     LIST_UPDATE,
     LIST_DELETE,
+    FIND_TITLE,
+    FIND_USERNAME
 } from './types'
 
 export function loginUser(dataTosubmit){
@@ -82,12 +84,32 @@ export function listUpdate(dataTosubmit){
 }
 
 export function listDelete(dataToSubmit){
-    console.log('deleteaction',dataToSubmit)
+    console.log('delet_eaction',dataToSubmit)
     const request = axios.delete('/api/boards/delete', {data:{_id:dataToSubmit}})
     .then(res=>res.data)
 
     return{
         type:LIST_DELETE,
+        payload:request
+    }
+}
+
+export function findTitle(dataToSubmit){
+    console.log('action title',dataToSubmit)
+    const request = axios.post('/api/boards/findTitle',{data: dataToSubmit})
+    .then(res=>res.data)
+    
+    return{
+        type:FIND_TITLE,
+        payload:request
+    }
+}
+
+export function findUserName(dataToSubmit){
+    const request = axios.post('/api/boards/findUserName',{data:dataToSubmit})
+    .then(res=>res.data)
+    return{
+        type:FIND_USERNAME,
         payload:request
     }
 }
