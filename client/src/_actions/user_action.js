@@ -98,7 +98,7 @@ export function findTitle(dataToSubmit){
     console.log('action title',dataToSubmit)
     const request = axios.post('/api/boards/findTitle',{data: dataToSubmit})
     .then(res=>res.data)
-    
+    console.log('action title result',request)
     return{
         type:FIND_TITLE,
         payload:request
