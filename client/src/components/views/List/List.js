@@ -2,14 +2,35 @@ import React,{useEffect,useState} from 'react';
 import {useDispatch} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {getList, findTitle, findUserName} from '../../../_actions/user_action'
-import {Table} from 'react-bootstrap'
+import {Table,Pagination} from 'react-bootstrap'
 function List(props){
     const dispatch = useDispatch()
     const name = props.name
-    const [dataList,setDataList] = useState([])
-    const [searchType,setSearchType] = useState('title')
-    const [searchTitle,setSearchTitle] = useState('')
-    const [searchUserName, setSearchUserName] = useState('')
+    const [dataList,setDataList] = useState([]) // 데이터 받아오는 배열
+    const [searchType,setSearchType] = useState('title') // 찾고자 하는 유형
+    const [searchTitle,setSearchTitle] = useState('') // 찾고자 하는 제목
+    const [searchUserName, setSearchUserName] = useState('') // 찾고자 하는 작성자
+
+    const [currentPage, setCurrentPage] = useState(1) // 현재 페이지
+    const [pageList, setPageList] = useState([])
+    const paginationHandler =(e)=>{
+        setCurrentPage(e.target.text)
+    }
+
+    console.log(currentPage)
+    const items = [];
+    useEffect(()=>{
+        const totalPage= 5;
+    for(let page=1; page<= totalPage; page++){
+        items.push(
+            <Pagination.Item key={page} active={page === currentPage}>
+                {page}
+            </Pagination.Item>
+        )
+    }
+    setPageList(items)
+    console.log('pageList:',pageList)
+    },[currentPage])
     useEffect(()=>{
         dispatch(getList())
         .then((res=>{
@@ -20,7 +41,6 @@ function List(props){
         if(searchType==='title'){
             dispatch(findTitle(searchTitle))   
         .then((res=>{
-            console.log('test:',res)
             setDataList(res.payload)
         }))
         }
@@ -45,15 +65,12 @@ function List(props){
     const searchTitleHandler = (e)=>{
         setSearchTitle(e.target.value)
         dispatch(findTitle(searchTitle))
-        console.log('searchTitle',searchTitle)
-        
     }
     const searchUserNameHandler = (e) =>{
         setSearchUserName(e.target.value)
         dispatch(findUserName(searchUserName))
-        console.log('searchUserName:',searchUserName)
-        
     }
+    
     return( 
         
         <div style={{justifyContent:'center', height:'100', margin:'40px' }}>
@@ -77,7 +94,7 @@ function List(props){
                 </tr>
                 </thead>
                 <tbody>
-                {
+                { 
                     dataList.map((data,index) => 
                         <tr key={data._id} data-item={index} onClick={detailPageHandler}>
                             <td  >{index+1}</td>
@@ -87,6 +104,7 @@ function List(props){
                 }
             </tbody>
             </Table>
+            <Pagination style={{display:'flex',alignItems:'center',justifyContent:'center'}} onClick={paginationHandler}>{pageList}</Pagination>
         </div>
     )
 }
