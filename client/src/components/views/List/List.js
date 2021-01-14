@@ -2,7 +2,10 @@ import React,{useEffect,useState} from 'react';
 import {useDispatch} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {getList, findTitle, findUserName} from '../../../_actions/user_action'
-import {Table,Pagination} from 'react-bootstrap'
+import {Table} from 'react-bootstrap'
+import Pagination from 'react-js-pagination';
+// import "bootstrap/less/bootstrap.less";
+
 function List(props){
     const dispatch = useDispatch()
     const name = props.name
@@ -11,32 +14,20 @@ function List(props){
     const [searchTitle,setSearchTitle] = useState('') // 찾고자 하는 제목
     const [searchUserName, setSearchUserName] = useState('') // 찾고자 하는 작성자
 
-    const [currentPage, setCurrentPage] = useState(1) // 현재 페이지
-    const [pageList, setPageList] = useState([])
-    const paginationHandler =(e)=>{
-        setCurrentPage(e.target.text)
+    const [currentPage,setCurrentPage] = useState(1);
+    const onhandlePageChange = (e)=>{
+        setCurrentPage(e)
     }
+    const itemsCountPerPage = 3;
+    const pageRangeDisplayed = 10;
 
-    console.log(currentPage)
-    const items = [];
-    useEffect(()=>{
-        const totalPage= 5;
-    for(let page=1; page<= totalPage; page++){
-        items.push(
-            <Pagination.Item key={page} active={page === currentPage}>
-                {page}
-            </Pagination.Item>
-        )
-    }
-    setPageList(items)
-    console.log('pageList:',pageList)
-    },[currentPage])
     useEffect(()=>{
         dispatch(getList())
         .then((res=>{
             setDataList(res.payload)
         }))
     },[dispatch])
+
     useEffect(()=>{
         if(searchType==='title'){
             dispatch(findTitle(searchTitle))   
@@ -95,16 +86,30 @@ function List(props){
                 </thead>
                 <tbody>
                 { 
-                    dataList.map((data,index) => 
-                        <tr key={data._id} data-item={index} onClick={detailPageHandler}>
-                            <td  >{index+1}</td>
+                    dataList.map((data,index) => {
+                        while((index%(itemsCountPerPage)) <3){
+                            // console.log('index:',index , itemsCountPerPage)
+                            return(
+                        <tr key={data._id} data-item={itemsCountPerPage} onClick={detailPageHandler}>
+                            <td  >{index+itemsCountPerPage*(currentPage-1)+1}</td>
                             <td  >{data.title}</td>
                             <td  >{data.userName}</td>
-                </tr>)
+                        </tr>
+                        )}
+                        })
                 }
             </tbody>
             </Table>
-            <Pagination style={{display:'flex',alignItems:'center',justifyContent:'center'}} onClick={paginationHandler}>{pageList}</Pagination>
+            <Pagination
+                activePage={currentPage}
+                itemsCountPerPage={itemsCountPerPage}
+                linkClass='page-link'
+                itemClass='page-item'
+                totalItemsCount={dataList.length}
+                pageRangeDisplayed={pageRangeDisplayed}
+                onChange={onhandlePageChange}
+            />
+            {}
         </div>
     )
 }
