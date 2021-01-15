@@ -4,7 +4,6 @@ import {withRouter} from 'react-router-dom'
 import {getList, findTitle, findUserName} from '../../../_actions/user_action'
 import {Table} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
-// import "bootstrap/less/bootstrap.less";
 
 function List(props){
     const dispatch = useDispatch()
@@ -18,8 +17,13 @@ function List(props){
     const onhandlePageChange = (e)=>{
         setCurrentPage(e)
     }
-    const itemsCountPerPage = 3;
-    const pageRangeDisplayed = 10;
+    const itemsCountPerPage = 5;
+    const pageRangeDisplayed = 5;
+
+    const indexOfLast = currentPage * itemsCountPerPage;
+    const indexOfFirst = indexOfLast - itemsCountPerPage;
+
+    
 
     useEffect(()=>{
         dispatch(getList())
@@ -61,7 +65,21 @@ function List(props){
         setSearchUserName(e.target.value)
         dispatch(findUserName(searchUserName))
     }
-    
+
+    const tmpLists =  dataList.map((data,index) => {
+        return(
+        <tr key={data._id} data-item={index} onClick={detailPageHandler}>
+            <td>{index+1}</td>
+            <td>{data.title}</td>
+            <td>{data.userName}</td>
+        </tr>)
+        })
+        function currentPosts(tmp) {
+            let currentPosts = 0;
+            currentPosts = tmp.slice(indexOfFirst, indexOfLast);
+            return currentPosts;
+            }
+    const renderLists = currentPosts(tmpLists)
     return( 
         
         <div style={{justifyContent:'center', height:'100', margin:'40px' }}>
@@ -85,20 +103,8 @@ function List(props){
                 </tr>
                 </thead>
                 <tbody>
-                { 
-                    dataList.map((data,index) => {
-                        while((index%(itemsCountPerPage)) <3){
-                            // console.log('index:',index , itemsCountPerPage)
-                            return(
-                        <tr key={data._id} data-item={itemsCountPerPage} onClick={detailPageHandler}>
-                            <td  >{index+itemsCountPerPage*(currentPage-1)+1}</td>
-                            <td  >{data.title}</td>
-                            <td  >{data.userName}</td>
-                        </tr>
-                        )}
-                        })
-                }
-            </tbody>
+                    {renderLists}
+                </tbody>
             </Table>
             <Pagination
                 activePage={currentPage}
