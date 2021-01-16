@@ -17,7 +17,8 @@ function LandingPage(props) {
       setName(res.payload.name)
       setIsLogin(res.payload.isAuth)
     })
-  },[dispatch])
+  },[dispatch]) // 로그인 되어있는지 판별. 로그인 되있으면 isLogin state가 true
+
   const listAddPage =()=>{
     if(!isLogin){
       alert('로그인 먼저하세요')
@@ -27,7 +28,7 @@ function LandingPage(props) {
         pathname: '/listAdd',
         state:{name: name}})
       }
-}
+} // 글 작성 버튼 클릭시 isLogin이 true일 때만 글 작성페이지로 넘어가게 됌
 
   
   return (

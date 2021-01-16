@@ -13,24 +13,23 @@ function List(props){
     const [searchTitle,setSearchTitle] = useState('') // 찾고자 하는 제목
     const [searchUserName, setSearchUserName] = useState('') // 찾고자 하는 작성자
 
-    const [currentPage,setCurrentPage] = useState(1);
-    const onhandlePageChange = (e)=>{
+    const [currentPage,setCurrentPage] = useState(1); // 현재 페이지
+
+    const onhandlePageChange = (e)=>{ // 현재 페이지 setState
         setCurrentPage(e)
     }
-    const itemsCountPerPage = 5;
-    const pageRangeDisplayed = 5;
+    const itemsCountPerPage = 5; // 한 페이지당 보여줄 항목
+    const pageRangeDisplayed = 5; // 페이지 5개까지 보여줌
 
-    const indexOfLast = currentPage * itemsCountPerPage;
-    const indexOfFirst = indexOfLast - itemsCountPerPage;
-
-    
+    const indexOfLast = currentPage * itemsCountPerPage; // 현재 페이지에 마지막 인덱스
+    const indexOfFirst = indexOfLast - itemsCountPerPage; // 현재 페이지에 첫번째 인덱스
 
     useEffect(()=>{
         dispatch(getList())
         .then((res=>{
             setDataList(res.payload)
         }))
-    },[dispatch])
+    },[dispatch]) // componentDidMount 할 때 디스패치를 통해 리스트 불러옴
 
     useEffect(()=>{
         if(searchType==='title'){
@@ -43,28 +42,31 @@ function List(props){
             dispatch(findUserName(searchUserName))
             .then(res=>setDataList(res.payload))
         }
-    },[searchTitle,searchUserName,searchType,dispatch])
+    },[searchTitle,searchUserName,searchType,dispatch]) // 검색 타입이 타이틀이면 제목으로 게시글 검색, 검색 타입이 작성자면 
+     // 작성자로 게시글 검색
 
     const detailPageHandler = (e)=>{
         const index = e.currentTarget.getAttribute('data-item')
-        console.log('clicked:',index)
         props.history.push({
             pathname:'/detailPage',
             search: `?query=${dataList[index]._id}`,
             state:{_id: dataList[index]._id, name: name}
         })
-    }
+    } // 인덱스에 해당하는 data-item 불러와서 세부내용 불러오는 페이지로 라우팅 처리
+
     const onSearchTypeHandler = (e)=>{
         setSearchType(e.target.value)
-    }
+    } // 타입 바꿔주는 setState
+
     const searchTitleHandler = (e)=>{
         setSearchTitle(e.target.value)
         dispatch(findTitle(searchTitle))
-    }
+    } // title로 게시글 검색할 시 dispatch 해줌
+
     const searchUserNameHandler = (e) =>{
         setSearchUserName(e.target.value)
         dispatch(findUserName(searchUserName))
-    }
+    } // userName으로 게시글 검색할 시 dispatch 해줌
 
     const tmpLists =  dataList.map((data,index) => {
         return(
@@ -73,15 +75,17 @@ function List(props){
             <td>{data.title}</td>
             <td>{data.userName}</td>
         </tr>)
-        })
+        }) // 받아온 getList를 통해 map 해줌
+
         function currentPosts(tmp) {
             let currentPosts = 0;
             currentPosts = tmp.slice(indexOfFirst, indexOfLast);
             return currentPosts;
-            }
-    const renderLists = currentPosts(tmpLists)
+            } // 한 페이지에 뿌려줄 게시글을 slice해주는 함수
+
+    const renderLists = currentPosts(tmpLists) // map한 getList를 slice
+    
     return( 
-        
         <div style={{justifyContent:'center', height:'100', margin:'40px' }}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <select name='searchType' onChange={onSearchTypeHandler}>
